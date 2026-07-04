@@ -114,7 +114,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,8,16,.92);
 
 /* KARMA BAND */
 .karma-band{background:linear-gradient(135deg,rgba(240,160,64,.04),rgba(224,104,128,.03));border-top:1px solid rgba(240,160,64,.1);border-bottom:1px solid rgba(240,160,64,.1);padding:72px 24px;position:relative;z-index:1}
-.karma-eg-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:36px}
+.karma-eg-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(220px,100%),1fr));gap:12px;margin-top:36px}
 .karma-eg{background:rgba(240,160,64,.05);border:1px solid rgba(240,160,64,.12);border-radius:12px;padding:14px 18px;display:flex;align-items:center;gap:12px}
 .karma-eg-icon{font-size:20px}
 .karma-eg-text{font-size:14px;color:var(--text)}
@@ -143,8 +143,20 @@ footer{position:relative;z-index:1;background:rgba(6,8,16,.95);border-top:1px so
 .footer-links a:hover{opacity:1;color:var(--amber)}
 .footer-copy{text-align:center;font-size:12px;color:#a8bfd8;opacity:.4;margin-top:32px;border-top:1px solid rgba(240,160,64,.07);padding-top:24px}
 
+.nav-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;width:32px;height:32px;background:none;border:none;cursor:pointer;z-index:101;flex-shrink:0}
+.nav-toggle span{display:block;width:100%;height:2px;background:#a8bfd8;transition:transform .25s,opacity .25s}
+.nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-toggle.open span:nth-child(2){opacity:0}
+.nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-mobile-cta{display:none}
+@media(max-width:860px){
+  .nav-toggle{display:flex}
+  .nav-right{display:none}
+  .nav-links{display:flex;position:fixed;top:0;right:0;height:100vh;width:min(78vw,320px);flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:20px;padding:80px 32px 24px;overflow-y:auto;background:rgba(6,8,16,.97);backdrop-filter:blur(12px);border-left:1px solid rgba(240,160,64,.15);transform:translateX(100%);transition:transform .3s ease;z-index:99;margin-left:0}
+  .nav-links.open{transform:translateX(0)}
+  .nav-mobile-cta{display:block;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--amber);border:1px solid rgba(240,160,64,.3);border-radius:999px;padding:10px 20px;text-decoration:none;margin-top:8px}
+}
 @media(max-width:700px){
-  .nav-links{display:none}
   .footer-inner{grid-template-columns:1fr}
   .footer-links{justify-content:flex-start}
   .timeline::before{left:20px}
@@ -168,15 +180,19 @@ footer{position:relative;z-index:1;background:rgba(6,8,16,.95);border-top:1px so
 <nav>
   <div class="nav-inner">
     <a class="nav-logo" href="https://oasisomniverse.one">MEMORY <span>LANE</span></a>
-    <div class="nav-links">
+    <div class="nav-links" id="nav-links">
       <a href="#timeline">TIMELINE</a>
       <a href="#types">MEMORY TYPES</a>
       <a href="#karma">KARMA</a>
       <a href="#oasis">OASIS</a>
+      <a href="https://oasisomniverse.one" class="nav-mobile-cta">OASIS OMNIVERSE</a>
     </div>
     <div class="nav-right" id="nav-right">
       <a class="nav-cta" href="https://oasisomniverse.one">OASIS OMNIVERSE</a>
     </div>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
@@ -558,6 +574,10 @@ try{
 </script>
 
 <script>
+document.getElementById('nav-toggle').addEventListener('click',function(){
+  this.classList.toggle('open');
+  document.getElementById('nav-links').classList.toggle('open');
+});
 (function(){
   const c=document.getElementById('starfield');
   const ctx=c.getContext('2d');
